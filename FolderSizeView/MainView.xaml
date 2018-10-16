@@ -1,0 +1,42 @@
+﻿<Window x:Class="FolderSizeView.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:folderSizeView="clr-namespace:FolderSizeView"
+        xmlns:progress="http://alsolos.ch/Commons/Wpf"
+        mc:Ignorable="d"
+        Title="Folder Size Info" Width="384" Height="512">
+
+    <Window.Resources>
+        <ResourceDictionary Source="Resources/Icons.xaml"/>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <folderSizeView:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <HeaderedContentControl Grid.Row="0" Header="Folder" Margin="8">
+            <TextBox Text="{Binding Folder, UpdateSourceTrigger=PropertyChanged}"/>
+        </HeaderedContentControl>
+
+        <progress:BusyContentControl Grid.Row="1" IsBusy="{Binding BusyHelper.IsBusy}" Message="{Binding BusyHelper.Message}">
+            <TreeView ItemsSource="{Binding Items}" Margin="8" SelectedValuePath="{Binding SelectedItem}">
+                <TreeView.Resources>
+                    <HierarchicalDataTemplate DataType="{x:Type folderSizeView:FolderSizeInfoViewModel}" ItemsSource="{Binding Children}">
+                        <StackPanel Orientation="Horizontal">
+                            <ContentControl Content="{StaticResource FolderIcon}"/>
+                            <TextBlock Text="{Binding DisplayName}" Margin="4 0 0 0"/>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.Resources>
+            </TreeView>
+        </progress:BusyContentControl>
+    </Grid>
+</Window>
