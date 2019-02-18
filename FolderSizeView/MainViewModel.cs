@@ -1,37 +1,26 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Alsolos.Commons.Wpf.Controls.Progress;
+using FolderSizeView.FolderSelection;
 
 namespace FolderSizeView
 {
     public class MainViewModel : BusyViewModel
     {
-        public string Folder
+        public MainViewModel()
         {
-            get => BackingFields.GetValue<string>();
-            set => BackingFields.SetValue(value, directory => UpdateItems());
+            FolderSelectorViewModel.PathChanged += OnFolderSelectorViewModelPathChanged;
         }
 
-        public IEnumerable<FolderSizeInfoViewModel> Items
-        {
-            get => BackingFields.GetValue<IEnumerable<FolderSizeInfoViewModel>>();
-            set => BackingFields.SetValue(value);
-        }
-
-        public string SelectedItem
-        {
-            get => BackingFields.GetValue<string>();
-            set => BackingFields.SetValue(value);
-        }
-
-        private async void UpdateItems()
+        private async void OnFolderSelectorViewModelPathChanged(object sender, EventArgs e)
         {
             using (BusyHelper.Enter("Calculating folder size."))
             {
-                if (Directory.Exists(Folder))
+                if (Directory.Exists(FolderSelectorViewModel.Path))
                 {
-                    var folderSizeInfo = await GetFolderSizeInfoAsync(Folder);
+                    var folderSizeInfo = await GetFolderSizeInfoAsync(FolderSelectorViewModel.Path);
 
                     Items = new[]
                     {
@@ -43,6 +32,20 @@ namespace FolderSizeView
                     Items = null;
                 }
             }
+        }
+
+        public FolderSelectorViewModel FolderSelectorViewModel => BackingFields.GetValue(() => new FolderSelectorViewModel());
+
+        public IEnumerable<FolderSizeInfoViewModel> Items
+        {
+            get => BackingFields.GetValue<IEnumerable<FolderSizeInfoViewModel>>();
+            set => BackingFields.SetValue(value);
+        }
+
+        public string SelectedItem
+        {
+            get => BackingFields.GetValue<string>();
+            set => BackingFields.SetValue(value);
         }
 
         private static Task<FolderSizeInfo> GetFolderSizeInfoAsync(string folder)

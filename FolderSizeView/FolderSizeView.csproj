@@ -40,6 +40,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -58,6 +59,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="FolderSelection\FolderSelectorView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -67,6 +72,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FileSizeFormatter.cs" />
+    <Compile Include="FolderSelection\FolderSelectorView.xaml.cs">
+      <DependentUpon>FolderSelectorView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="FolderSelection\FolderSelectorViewModel.cs" />
+    <Compile Include="FolderSelection\INotifyPathChanged.cs" />
     <Compile Include="FolderSizeInfo.cs" />
     <Compile Include="FolderSizeInfoViewModel.cs" />
     <Compile Include="MainViewModel.cs" />
@@ -74,7 +84,15 @@
       <DependentUpon>MainView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\BorderStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\Icons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\TreeViewItemStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
