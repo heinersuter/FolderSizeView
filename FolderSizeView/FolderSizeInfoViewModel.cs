@@ -19,6 +19,8 @@ namespace FolderSizeView
 
         public string Size => FileSizeFormatter.FormatSize(_folderSizeInfo.Size);
 
+        public int NumberOfFiles => _folderSizeInfo.NumberOfFiles;
+
         public string SizePercentage => $"{_folderSizeInfo.SizePercentage:P1}";
 
         public IEnumerable<FolderSizeInfoViewModel> Children { get; }

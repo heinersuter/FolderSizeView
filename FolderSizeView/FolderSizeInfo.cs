@@ -19,6 +19,8 @@ namespace FolderSizeView
 
                 Size = directoryInfo.GetFiles().Sum(file => file.Length) + Children.Sum(folder => folder.Size);
 
+                NumberOfFiles = directoryInfo.GetFiles("*", SearchOption.AllDirectories).Length;
+
                 foreach (var child in Children)
                 {
                     child.SizePercentage = 1.0 / Size * child.Size;
@@ -36,6 +38,8 @@ namespace FolderSizeView
         public long Size { get; }
 
         public double SizePercentage { get; private set; } = 1.0;
+
+        public int NumberOfFiles { get; }
 
         public IEnumerable<FolderSizeInfo> Children { get; }
     }

@@ -4,20 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:folderSizeView="clr-namespace:FolderSizeView"
-        xmlns:progress="http://alsolos.ch/Commons/Wpf"
         xmlns:folderSelection="clr-namespace:FolderSizeView.FolderSelection"
+        xmlns:sizeTree="clr-namespace:FolderSizeView.SizeTree"
         mc:Ignorable="d"
-        Title="Folder Size Info" Width="384" Height="512" d:DataContext="{d:DesignInstance folderSizeView:MainViewModel}">
-
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/Icons.xaml"/>
-                <ResourceDictionary Source="Resources/TreeViewItemStyle.xaml"/>
-                <ResourceDictionary Source="Resources/BorderStyles.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+        Background="DarkSlateGray"
+        Foreground="AliceBlue"
+        Title="Folder Size View" Width="384" Height="512" 
+        d:DataContext="{d:DesignInstance folderSizeView:MainViewModel}">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -25,44 +18,9 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <HeaderedContentControl Grid.Row="0" Header="Folder" Margin="8">
-            <folderSelection:FolderSelectorView DataContext="{Binding FolderSelectorViewModel}"/>
-        </HeaderedContentControl>
+        <folderSelection:FolderSelectorView Grid.Row="0" DataContext="{Binding FolderSelectorViewModel}" Margin="8"/>
 
-        <progress:BusyContentControl Grid.Row="1" IsBusy="{Binding BusyHelper.IsBusy}" Message="{Binding BusyHelper.Message}">
-            <TreeView ItemsSource="{Binding Items}" 
-                      Margin="8" SelectedValuePath="{Binding SelectedItem}" 
-                      Grid.IsSharedSizeScope="True" 
-                      HorizontalContentAlignment="Stretch" 
-                      ItemContainerStyle="{StaticResource TreeViewItemStyle1}">
-                <TreeView.Resources>
-                    <HierarchicalDataTemplate DataType="{x:Type folderSizeView:FolderSizeInfoViewModel}" ItemsSource="{Binding Children}">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="Size"/>
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="Percentage"/>
-                                <ColumnDefinition Width="Auto" SharedSizeGroup="Open"/>
-                            </Grid.ColumnDefinitions>
-                            <Border Grid.Column="0" Style="{StaticResource TableBorderStyle}">
-                                <StackPanel Orientation="Horizontal">
-                                    <ContentControl Content="{StaticResource FolderIcon}"/>
-                                    <TextBlock Text="{Binding Name}" Margin="4 0 4 0"/>
-                                </StackPanel>
-                            </Border>
-                            <Border Grid.Column="1" Style="{StaticResource TableBorderStyle}">
-                                <TextBlock Text="{Binding Size}" Margin="4 0 4 0" HorizontalAlignment="Right"/>
-                            </Border>
-                            <Border Grid.Column="2" Style="{StaticResource TableBorderStyle}">
-                                <TextBlock Text="{Binding SizePercentage}" Margin="4 0 4 0" HorizontalAlignment="Right"/>
-                            </Border>
-                            <Border Grid.Column="3" Style="{StaticResource TableBorderStyle}">
-                                <Button Command="{Binding OpenFolderCommand}" Content="..." Margin="4 0 4 0" Padding="4 0 4 0"/>
-                            </Border>
-                        </Grid>
-                    </HierarchicalDataTemplate>
-                </TreeView.Resources>
-            </TreeView>
-        </progress:BusyContentControl>
+        <sizeTree:SizeTreeView Grid.Row="1" DataContext="{Binding SizeTreeViewModel}" Margin="8"/>
+
     </Grid>
 </Window>

@@ -1,28 +1,54 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace FolderSizeView.FolderSelection
 {
-    /// <summary>
-    /// Interaction logic for FolderSelectorView.xaml
-    /// </summary>
-    public partial class FolderSelectorView : UserControl
+    public partial class FolderSelectorView
     {
         public FolderSelectorView()
         {
             InitializeComponent();
+        }
+
+        private void OnDragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var filenames = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                if (filenames != null && filenames.Length == 1)
+                {
+                    e.Effects = DragDropEffects.All;
+                    e.Handled = true;
+                    return;
+                }
+            }
+
+            e.Handled = true;
+        }
+
+        private void OnDrop(object sender, DragEventArgs e)
+        {
+            var filenames = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (filenames != null && filenames.Length == 1)
+            {
+                if (File.Exists(filenames[0]))
+                {
+                    FolderTextBox.Text = Path.GetDirectoryName(filenames[0]);
+
+                }
+                else
+                {
+                    FolderTextBox.Text = filenames[0];
+                }
+            }
+        }
+
+        private void OnPreviewDragOver(object sender, DragEventArgs e)
+        {
+            e.Effects = DragDropEffects.Move;
+            e.Handled = true;
         }
     }
 }
